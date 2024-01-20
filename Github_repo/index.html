@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repositories of Zohaib7542 </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #1124d3;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #repos {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .repo-card {
+            width: 30%;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        #loader {
+            display: none;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination select {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>GitHub Repositories of Zohaib7542 </h1>
+    </header>
+
+    <div class="container">
+        <div id="loader">Loading...</div>
+        <div id="repos"></div>
+        <div class="pagination">
+            <label for="perPage">Repositories per page:</label>
+            <select id="perPage">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        const username = "Zohaib7542";
+        let currentPage = 1;
+        let perPage = 10;
+
+        function fetchRepos() {
+            $('#loader').show();
+            $.get(`https://api.github.com/users/${username}/repos?page=${currentPage}&per_page=${perPage}`, function(data) {
+                displayRepos(data);
+                $('#loader').hide();
+            });
+        }
+
+        function displayRepos(repos) {
+            const reposContainer = $('#repos');
+            reposContainer.empty();
+
+            repos.forEach(repo => {
+                const repoCard = `
+                    <div class="repo-card">
+                        <h3>${repo.name}</h3>
+                        <p>${repo.description || 'No description available.'}</p>
+                        <a href="${repo.html_url}" target="_blank">Visit Repo</a>
+                    </div>
+                `;
+                reposContainer.append(repoCard);
+            });
+        }
+
+        function updatePerPage() {
+            perPage = $('#perPage').val();
+            currentPage = 1;
+            fetchRepos();
+        }
+
+        $('#perPage').change(updatePerPage);
+
+        fetchRepos();
+    </script>
+</body>
+</html>
